@@ -13,21 +13,25 @@ import (
 	"golang.org/x/tools/refactor/lexical"
 )
 
-func main() {
-	target := "lonnie.io/e8vm/arch8"
+type File struct {
+	Depends []string
+	UsedBy  []string
+}
 
+type Packcage struct {
+	Deps  []string
+	Files map[string]*File
+}
+
+func Build(packPath string) {
 	ctxt := build.Default
-
-	pkgs := []string{target}
-
 	conf := loader.Config{
 		Build:         &ctxt,
 		SourceImports: true,
 	}
-	for _, path := range pkgs {
-		if err := conf.ImportWithTests(path); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+
+	if err := conf.ImportWithTests(packPath); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
 
 	iprog, err := conf.Load()
@@ -41,9 +45,8 @@ func main() {
 
 	for pkg, info := range iprog.AllPackages {
 		name := pkg.Path()
-		if name != target {
+		if name != packPath {
 			deps = append(deps, name)
-			// fmt.Println(name) // depending packages
 			continue
 		}
 
@@ -81,4 +84,8 @@ func main() {
 	for _, s := range strs {
 		fmt.Println(s)
 	}
+}
+
+func main() {
+	Build("lonnie.io/e8vm/asm8")
 }
