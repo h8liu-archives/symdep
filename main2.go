@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"go/parser"
 	"go/ast"
+	"go/parser"
 	"go/token"
 )
 
