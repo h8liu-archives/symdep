@@ -270,9 +270,10 @@ func main() {
 	p, e := NewPackage(args[0])
 	ne(e)
 
-	p.PrintFileDeps()
-
 	e = p.MakeLevelsTop()
+	if e != nil {
+		p.PrintFileDeps()
+	}
 	ne(e)
 
 	fmt.Println("From bot to top:")
