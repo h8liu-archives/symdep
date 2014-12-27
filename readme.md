@@ -4,7 +4,7 @@ The
 Example:
 
 ```
-$ symdep lonnie.io # prints the layers
+$ symdep lonnie.io/e8vm/asm8 # prints the layers
 0: inst symbol token
 1: sym_table lex_operand lex_string lex_comment
 2: sym_scope lex_all
