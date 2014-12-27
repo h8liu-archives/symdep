@@ -276,10 +276,10 @@ func main() {
 	}
 	ne(e)
 
-	fmt.Println("From bot to top:")
 	p.PrintLevelsTop()
+	fmt.Println()
 
-	fmt.Println("From top to bot:")
 	e = p.MakeLevelsBot()
+	ne(e)
 	p.PrintLevelsBot()
 }
