@@ -147,7 +147,7 @@ func (p *Package) makeLevels(r reverse) ([][]*File, error) {
 					panic("bug")
 				}
 
-				if fref.level >= 0 {
+				if fref.level >= 0 && fref.level < level {
 					return nil, errCircDep
 				}
 
