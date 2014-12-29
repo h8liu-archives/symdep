@@ -142,21 +142,21 @@ func (p *Package) makeLevels(r reverse) ([][]*File, error) {
 
 		for _, f := range cur {
 			outputs := r.outputs(f)
-			for _, fref := range outputs {
-				if r.inputs(fref)[f.Name] == nil {
+			for _, out := range outputs {
+				if r.inputs(out)[f.Name] == nil {
 					panic("bug")
 				}
 
-				if fref.level >= 0 && fref.level < level {
+				if out.level >= 0 && out.level < level {
 					return nil, errCircDep
 				}
 
-				wasHit := fref.hits[f.Name]
-				fref.hits[f.Name] = true
+				wasHit := out.hits[f.Name]
+				out.hits[f.Name] = true
 
-				if !wasHit && len(fref.hits) == len(r.inputs(fref)) {
-					next = append(next, fref)
-					fref.level = level
+				if !wasHit && len(out.hits) == len(r.inputs(out)) {
+					next = append(next, out)
+					out.level = level
 				}
 			}
 		}
