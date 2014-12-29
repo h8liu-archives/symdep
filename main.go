@@ -38,14 +38,14 @@ type Package struct {
 
 type reverse bool
 
-func (r reverse) pres(f *File) map[string]*File {
+func (r reverse) inputs(f *File) map[string]*File {
 	if !r {
 		return f.Depends
 	}
 	return f.UsedBy
 }
 
-func (r reverse) posts(f *File) map[string]*File {
+func (r reverse) outputs(f *File) map[string]*File {
 	if !r {
 		return f.UsedBy
 	}
@@ -125,7 +125,7 @@ func (p *Package) makeLevels(r reverse) ([][]*File, error) {
 	var ret [][]*File
 
 	for _, f := range p.Files {
-		if len(r.pres(f)) == 0 {
+		if len(r.inputs(f)) == 0 {
 			cur = append(cur, f)
 			f.level = 0
 		} else {
@@ -141,20 +141,20 @@ func (p *Package) makeLevels(r reverse) ([][]*File, error) {
 		ntotal += len(cur)
 
 		for _, f := range cur {
-			posts := r.posts(f)
-			for _, fref := range posts {
-				if r.pres(fref)[f.Name] == nil {
+			outputs := r.outputs(f)
+			for _, fref := range outputs {
+				if r.inputs(fref)[f.Name] == nil {
 					panic("bug")
 				}
 
-				if fref.level >= 0 {
+				if fref.level >= 0 && fref.level < level {
 					return nil, errCircDep
 				}
 
 				wasHit := fref.hits[f.Name]
 				fref.hits[f.Name] = true
 
-				if !wasHit && len(fref.hits) == len(r.pres(fref)) {
+				if !wasHit && len(fref.hits) == len(r.inputs(fref)) {
 					next = append(next, fref)
 					fref.level = level
 				}
