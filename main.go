@@ -270,16 +270,11 @@ func main() {
 	p, e := NewPackage(args[0])
 	ne(e)
 
-	e = p.MakeLevelsTop()
+	e = p.MakeLevelsBot()
 	if e != nil {
 		p.PrintFileDeps()
 	}
 	ne(e)
 
-	p.PrintLevelsTop()
-	fmt.Println()
-
-	e = p.MakeLevelsBot()
-	ne(e)
 	p.PrintLevelsBot()
 }
